@@ -1,0 +1,32 @@
+cmake_minimum_required (VERSION 2.6)
+project (NativeFileDialog)
+
+if(MSVC OR MSVC80)
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /W4")
+
+  set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} /MD")
+  set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} /O2")
+
+  set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} /MDd")
+  set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} /Z7")
+elseif(CMAKE_COMPILER_IS_GNUC OR APPLE)
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -pedantic")
+
+  set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -O3")
+
+  set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -g")
+endif()
+
+if(APPLE)
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fcolor-diagnostics")
+endif()
+
+set(NFD_SOURCE_FILES "nfd_common.c")
+
+if(APPLE)
+  list(APPEND NFD_SOURCE_FILES "nfd_cocoa.m")
+endif()
+
+include_directories(./include)
+
+add_library(nfd ${NFD_SOURCE_FILES})
