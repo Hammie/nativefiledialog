@@ -1,5 +1,7 @@
 cmake_minimum_required (VERSION 2.6)
-project (NativeFileDialog)
+project (Test)
+
+find_package(NativeFileDialog REQUIRED)
 
 if(MSVC OR MSVC80)
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /W4")
@@ -25,21 +27,23 @@ if(APPLE)
   list(APPEND TEST_SOURCE_FILES "nfd_cocoa.m")
 endif()
 
-include_directories(../src/include)
+include_directories(${NFD_INCLUDES})
 
-find_library(APPKIT AppKit)
 
 set(BUNDLE_OPTION "")
 
 if(APPLE)
+  find_library(APPKIT AppKit)
   set(BUNDLE_OPTION "MACOSX_BUNDLE")
+else()
+  set(APPKIT "")
 endif()
 
 add_executable(test_opendialog ${BUNDLE_OPTION} "test_opendialog.c")
-target_link_libraries(test_opendialog nfd ${APPKIT})
+target_link_libraries(test_opendialog ${NFD_LIBRARIES} ${APPKIT})
 
 add_executable(test_opendialogmultiple ${BUNDLE_OPTION} "test_opendialogmultiple.c")
-target_link_libraries(test_opendialogmultiple nfd ${APPKIT})
+target_link_libraries(test_opendialogmultiple ${NFD_LIBRARIES} ${APPKIT})
 
 add_executable(test_savedialog ${BUNDLE_OPTION} "test_savedialog.c")
-target_link_libraries(test_savedialog nfd ${APPKIT})
+target_link_libraries(test_savedialog ${NFD_LIBRARIES} ${APPKIT})

@@ -25,8 +25,14 @@ set(NFD_SOURCE_FILES "nfd_common.c")
 
 if(APPLE)
   list(APPEND NFD_SOURCE_FILES "nfd_cocoa.m")
+elseif(MSVC OR MSVC80)
+  list(APPEND NFD_SOURCE_FILES "nfd_win.cpp")
 endif()
 
 include_directories(./include)
 
 add_library(nfd ${NFD_SOURCE_FILES})
+
+install(TARGETS nfd DESTINATION lib)
+install(DIRECTORY "include" DESTINATION ".")
+install(FILES NativeFileDialog-config.cmake DESTINATION ".")
